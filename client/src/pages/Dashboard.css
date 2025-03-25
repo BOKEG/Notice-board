@@ -1,0 +1,52 @@
+/* 📌 Dashboard.css */
+.dashboard {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .loading {
+    color: #007bff;
+    font-weight: bold;
+  }
+  
+  .error {
+    color: red;
+    font-weight: bold;
+  }
+  
+  .notice-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .notice-item {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px 0;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .notice-item h3 {
+    margin: 0;
+    color: #333;
+  }
+  
+  .category {
+    display: inline-block;
+    margin-top: 5px;
+    padding: 5px 10px;
+    background: #007bff;
+    color: white;
+    border-radius: 5px;
+    font-size: 0.8rem;
+  }
+  
+  .date {
+    font-size: 0.9rem;
+    color: gray;
+    margin-top: 5px;
+  }
+  

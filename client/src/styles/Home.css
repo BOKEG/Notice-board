@@ -1,0 +1,59 @@
+/* 🔹 Landing Page Styles */
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .heading {
+    font-size: 2rem;
+    color: #333;
+  }
+  
+  .subtitle {
+    font-size: 1.2rem;
+    color: #555;
+  }
+  
+  /* 🔹 Sections (Notices & Events) */
+  .section {
+    margin-top: 30px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+  }
+  
+  .list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  /* 🔹 Login / Register Section */
+  .authSection {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 8px;
+  }
+  
+  .buttonContainer {
+    margin-top: 10px;
+  }
+  
+  .button {
+    padding: 10px 20px;
+    margin: 5px;
+    background-color: #fff;
+    color: #007bff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+  }
+  
+  .button:hover {
+    background-color: #0056b3;
+    color: white;
+  }
+  
