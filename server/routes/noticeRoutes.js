@@ -4,27 +4,28 @@ import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// Pass io & sendEmailNotification function from server.js
-export default (io, sendEmailNotification) => {
+// Function to initialize routes with io and sendPushNotification
+const noticeRoutes = (io, sendPushNotification) => {
   // 🔹 GET ALL NOTICES (Public)
   router.get("/", async (req, res) => {
     try {
       const notices = await Notice.find().sort({ createdAt: -1 });
       res.json(notices);
     } catch (error) {
-      console.error("Error fetching notices:", error);
+      console.error("❌ Error fetching notices:", error);
       res.status(500).json({ error: "Server Error" });
     }
   });
 
-  // 🔹 POST NOTICE (Admins Only & Sends Notifications)
+  // 🔹 POST NOTICE (Admins Only & Sends Push Notifications)
   router.post("/", authMiddleware, async (req, res) => {
+    console.log("📩 Incoming Request Data:", req.body);
     try {
       if (req.user.role !== "admin") {
         return res.status(403).json({ error: "Unauthorized: Admins only" });
       }
 
-      const { title, description, category, studentEmails = [] } = req.body;
+      const { title, description, category, studentTokens = [] } = req.body;
       if (!title || !description || !category) {
         return res.status(400).json({ error: "All fields are required" });
       }
@@ -36,14 +37,14 @@ export default (io, sendEmailNotification) => {
       // 🔹 Send Real-time Notification
       io.emit("receiveNotice", newNotice);
 
-      // 🔹 Send Email Notification (if student emails are provided)
-      if (studentEmails.length > 0) {
-        sendEmailNotification(title, description, studentEmails);
+      // 🔹 Send Push Notification (if studentTokens are provided)
+      if (studentTokens.length > 0) {
+        sendPushNotification(title, description, studentTokens);
       }
 
-      res.status(201).json({ message: "Notice added successfully!", newNotice });
+      res.status(201).json({ message: "✅ Notice added successfully!", newNotice });
     } catch (error) {
-      console.error("Error adding notice:", error);
+      console.error("❌ Error adding notice:", error);
       res.status(500).json({ error: "Server Error" });
     }
   });
@@ -73,9 +74,9 @@ export default (io, sendEmailNotification) => {
       // 🔹 Send Real-time Update
       io.emit("updateNotice", updatedNotice);
 
-      res.status(200).json({ message: "Notice updated successfully!", updatedNotice });
+      res.status(200).json({ message: "✅ Notice updated successfully!", updatedNotice });
     } catch (error) {
-      console.error("Error updating notice:", error);
+      console.error("❌ Error updating notice:", error);
       res.status(500).json({ error: "Server Error" });
     }
   });
@@ -96,12 +97,14 @@ export default (io, sendEmailNotification) => {
       // 🔹 Send Real-time Deletion
       io.emit("deleteNotice", req.params.id);
 
-      res.status(200).json({ message: "Notice deleted successfully!" });
+      res.status(200).json({ message: "✅ Notice deleted successfully!" });
     } catch (error) {
-      console.error("Error deleting notice:", error);
+      console.error("❌ Error deleting notice:", error);
       res.status(500).json({ error: "Server Error" });
     }
   });
 
   return router;
 };
+
+export default noticeRoutes;

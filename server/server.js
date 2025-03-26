@@ -6,7 +6,7 @@ import { Server } from "socket.io";
 import http from "http";
 import authRoutes from "./routes/authRoutes.js";
 import noticeRoutes from "./routes/noticeRoutes.js";
-import nodemailer from "nodemailer";
+import sendPushNotification from "./firebase.js"; // Import push notification function
 
 dotenv.config(); // Load environment variables
 
@@ -43,32 +43,9 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => console.log("🔴 User Disconnected:", socket.id));
 });
 
-// Nodemailer setup for email notifications
-const sendEmailNotification = async (title, message, studentEmails) => {
-  let transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.EMAIL_USER, // Your email
-      pass: process.env.EMAIL_PASS, // App password
-    },
-  });
-
-  let mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: studentEmails.join(","),
-    subject: `New Notice: ${title}`,
-    text: message,
-  };
-
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) console.log("❌ Email Error:", error);
-    else console.log("📧 Email Sent:", info.response);
-  });
-};
-
 // Routes
 app.use("/api/auth", authRoutes);
-app.use("/api/notices", noticeRoutes(io, sendEmailNotification)); // Pass IO & Email function
+app.use("/api/notices", noticeRoutes(io, sendPushNotification)); // Pass IO & Push Notification function
 
 // Base Route
 app.get("/", (req, res) => {

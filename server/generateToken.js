@@ -1,11 +1,12 @@
-import "dotenv/config";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 
-// Generate a test token
-const generateToken = (userId) => {
-  return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "1h" });
-};
+dotenv.config(); // Load environment variables
 
-// Example usage
-const token = generateToken("67e2a058a5526aa84210f1b8");
+const token = jwt.sign(
+  { id: "67e3c21ddba4abdcd85c0c97", role: "admin" }, 
+  process.env.JWT_SECRET, 
+  { expiresIn: "1h" } // Token expires in 1 hour
+);
+
 console.log("Generated Token:", token);

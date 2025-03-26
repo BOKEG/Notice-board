@@ -8,9 +8,9 @@ const router = express.Router();
 // 🔹 REGISTER USER
 router.post("/register", async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
     
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !role) {
       return res.status(400).json({ error: "All fields are required" });
     }
 
@@ -20,7 +20,7 @@ router.post("/register", async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ name, email, password: hashedPassword });
+    const newUser = new User({ name, email, password: hashedPassword, role: role || "student" });
 
     await newUser.save();
     res.status(201).json({ message: "User registered successfully" });
@@ -53,6 +53,19 @@ router.post("/login", async (req, res) => {
     res.status(200).json({ message: "Login successful", token, user: { id: user._id, name: user.name, role: user.role } });
   } catch (error) {
     res.status(500).json({ error: "Server error" });
+  }
+});
+
+// Save FCM Token
+router.post("/save-token", async (req, res) => {
+  const { email, token } = req.body;
+
+  try {
+    await User.findOneAndUpdate({ email }, { fcmToken: token });
+    res.json({ message: "✅ FCM Token saved successfully" });
+  } catch (error) {
+    console.error("❌ Error saving FCM Token:", error);
+    res.status(500).json({ error: "Server Error" });
   }
 });
 
