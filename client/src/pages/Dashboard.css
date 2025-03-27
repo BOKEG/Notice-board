@@ -49,4 +49,60 @@
     color: gray;
     margin-top: 5px;
   }
+
+  .category-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    background: #f9f9f9;
+  }
+  
+  .category-title {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #333;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 5px;
+  }
+  
+  .notice-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .notice-item {
+    background: white;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* ✅ Timetable Section */
+.timetable-section {
+  margin-top: 30px;
+  padding: 15px;
+  background: #f4f4f4;
+  border-radius: 8px;
+}
+
+.timetable-list {
+  list-style: none;
+  padding: 0;
+}
+
+.timetable-item {
+  margin-bottom: 10px;
+}
+
+.download-link {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.download-link:hover {
+  text-decoration: underline;
+}
+
   

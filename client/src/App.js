@@ -9,7 +9,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
-import Notices from "./pages/Notices";
+
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -25,7 +25,7 @@ function App() {
 
         {/* Private Routes */}
         <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} />} />
-        <Route path="/notices" element={<PrivateRoute element={<Notices />} />} />
+        
 
         {/* Catch-All for Undefined Routes */}
         <Route path="*" element={<h2>404 - Page Not Found</h2>} />

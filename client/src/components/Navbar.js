@@ -19,7 +19,7 @@ const Navbar = () => {
         {user ? (
           <>
             <Link to="/dashboard">Dashboard</Link>
-            <Link to="/notices">Notices</Link>
+            
 
             {/* 🔹 Logout Button Styled as a Link */}
             <button className="logout-btn" onClick={logout}>Logout</button>

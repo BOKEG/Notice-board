@@ -7,11 +7,16 @@ import http from "http";
 import authRoutes from "./routes/authRoutes.js";
 import noticeRoutes from "./routes/noticeRoutes.js";
 import sendPushNotification from "./firebase.js"; // Import push notification function
+import path from "path";
+import { fileURLToPath } from "url";
+import timetableRoutes from "./routes/timetableRoutes.js";
 
 dotenv.config(); // Load environment variables
 
 const app = express();
 const server = http.createServer(app); // Create an HTTP server
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Middleware
 app.use(cors());
@@ -47,6 +52,10 @@ io.on("connection", (socket) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/notices", noticeRoutes(io, sendPushNotification)); // Pass IO & Push Notification function
 
+// Serve uploaded files
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+app.use("/api/timetables", timetableRoutes);
 // Base Route
 app.get("/", (req, res) => {
   res.send("Welcome to the School Notice Board API!");
