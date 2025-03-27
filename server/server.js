@@ -18,6 +18,8 @@ const server = http.createServer(app); // Create an HTTP server
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+//const __dirname = path.resolve();
+
 // ✅ CORS Configuration (Add it Here)
 const io = new Server(server, {
   cors: {
@@ -69,6 +71,14 @@ app.use("/api/timetables", timetableRoutes);
 app.get("/", (req, res) => {
   res.send("Welcome to the School Notice Board API!");
 });
+
+if (process.env,NODE_ENV==="production"){
+  app.use(express.static(path.join(__dirname, "../client/build")));
+
+  app.get("*",(req, res) =>{
+    res.sendFile(path.join(__dirname, "../client","dist","index.html"));
+  })
+}
 
 // ✅ Start Server
 const PORT = process.env.PORT || 5000;
