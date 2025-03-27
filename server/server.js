@@ -18,24 +18,31 @@ const server = http.createServer(app); // Create an HTTP server
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Middleware
-app.use(cors());
+// ✅ CORS Configuration (Add it Here)
+const io = new Server(server, {
+  cors: {
+    origin: process.env.FRONTEND_URL || "http://localhost:3000", // ✅ Use env variable
+    methods: ["GET", "POST"],
+  },
+});
+
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    credentials: true, // ✅ Allow cookies and authentication if needed
+  })
+);
+
+// ✅ Middleware
 app.use(express.json());
 
-// Connect to MongoDB
+// ✅ MongoDB Connection
 mongoose
   .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.log("❌ MongoDB Connection Error:", err));
 
-// Setup Socket.IO for real-time updates
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:3000", // Your frontend URL
-    methods: ["GET", "POST"],
-  },
-});
-
+// ✅ Setup Socket.IO for Real-time Updates
 io.on("connection", (socket) => {
   console.log("🟢 User Connected:", socket.id);
 
@@ -48,19 +55,21 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => console.log("🔴 User Disconnected:", socket.id));
 });
 
-// Routes
+// ✅ Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/notices", noticeRoutes(io, sendPushNotification)); // Pass IO & Push Notification function
 
-// Serve uploaded files
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+// ✅ Serve Uploaded Files (For Local Use)
+const uploadPath = path.join(__dirname, "uploads");
+app.use("/uploads", express.static(uploadPath));
 
 app.use("/api/timetables", timetableRoutes);
-// Base Route
+
+// ✅ Base Route
 app.get("/", (req, res) => {
   res.send("Welcome to the School Notice Board API!");
 });
 
-// Start Server
+// ✅ Start Server
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
